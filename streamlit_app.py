@@ -45,7 +45,7 @@ def analyze_case():
             else:
                 st.success(response["choices"][0]["text"])
             if st.button("Success"):
-                st.success("The case has been successfully analyzed
+                st.success("The case has been successfully analyzed")
             else:
                 st.error("Please enter a search query")
 
