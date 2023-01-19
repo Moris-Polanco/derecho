@@ -2,15 +2,11 @@ import openai
 import streamlit as st
 import os
 import requests
+from bs4 import BeautifulSoup
+
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-import openai
-import streamlit as st
-import requests
-from bs4 import BeautifulSoup
-
-openai.api_key = "YOUR_API_KEY"
 
 def analyze_case():
     case_info = st.text_input("Enter the information about the legal case you want to analyze")
