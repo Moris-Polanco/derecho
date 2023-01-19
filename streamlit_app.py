@@ -4,12 +4,13 @@ import os
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
+
 def analyze_case():
     case_info = st.text_input("Enter the information about the legal case you want to analyze")
     if st.button("Analyze"):
         response = openai.Completion.create(
             engine="text-davinci-002",
-            prompt=f'Analyze a legal case according to Guatemalan legislation {case_info}',
+            prompt=f'Analyze a legal case according to Guatemalan legislation including the citation of the law that is violated and the penalty that is deserved. {case_info}',
             max_tokens=1024,
             n=1,
             stop=None,
