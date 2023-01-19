@@ -1,20 +1,22 @@
 import openai
 import streamlit as st
 import os
+import requests
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
 def analyze_case():
     case_info = st.text_input("Enter the information about the legal case you want to analyze")
-    document = st.file_uploader("Upload document")
+    url = st.text_input("Enter the URL of the webpage you want to analyze")
     if st.button("Analyze"):
-        if document:
+        if url:
             try:
-                doc = open(document, 'r').read()
+                page = requests.get(url)
+                doc = page.text
             except:
-                st.error("An error occurred while reading the document")
+                st.error("An error occurred while reading the webpage")
                 return
-            prompt = f'Analyze a legal case according to Guatemalan legislation using the following document: {doc}. {case_info}'
+            prompt = f'Analyze a legal case according to Guatemalan legislation using the following webpage: {doc}. {case_info}'
             response = openai.Completion.create(
                 engine="text-davinci-002",
                 prompt=prompt,
@@ -30,8 +32,8 @@ def analyze_case():
             if st.button("Success"):
                 st.success("The case has been successfully analyzed")
         else:
-            st.error("Please upload the required document")
+            st.error("Please enter the URL of the webpage")
 
 st.title("Legal case analyzer")
-st.write("Enter information about the legal case you want to analyze and upload the required document, then press the 'Analyze' button")
+st.write("Enter information about the legal case you want to analyze and enter the URL of the webpage, then press the 'Analyze' button")
 analyze_case()
