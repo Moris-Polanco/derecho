@@ -44,7 +44,6 @@ def analyze_case():
                 st.success("The case has been successfully analyzed")
             else:
                 st.error("Please enter a search query")
-
-    st.title("Legal case analyzer")
-    st.write("Enter information about the legal case you want to analyze and enter the search query, then press the 'Analyze' button")
-    analyze_case()
+st.title("Legal case analyzer")
+st.write("Enter information about the legal case you want to analyze and enter the search query, then press the 'Analyze' button")
+analyze_case()
