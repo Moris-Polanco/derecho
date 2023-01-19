@@ -4,22 +4,17 @@ import os
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-
 def analyze_case():
     case_info = st.text_input("Enter the information about the legal case you want to analyze")
-    document1 = st.file_uploader("Upload first document")
-    document2 = st.file_uploader("Upload second document")
-    document3 = st.file_uploader("Upload third document")
+    document = st.file_uploader("Upload document")
     if st.button("Analyze"):
-        if document1 and document2 and document3:
+        if document:
             try:
-                doc1 = open(document1, 'r').read()
-                doc2 = open(document2, 'r').read()
-                doc3 = open(document3, 'r').read()
+                doc = open(document, 'r').read()
             except:
-                st.error("Some error occurred while reading the document")
+                st.error("An error occurred while reading the document")
                 return
-            prompt = f'Analyze a legal case according to Guatemalan legislation using the following documents: {doc1}, {doc2}, {doc3}. {case_info}'
+            prompt = f'Analyze a legal case according to Guatemalan legislation using the following document: {doc}. {case_info}'
             response = openai.Completion.create(
                 engine="text-davinci-002",
                 prompt=prompt,
@@ -35,8 +30,8 @@ def analyze_case():
             if st.button("Success"):
                 st.success("The case has been successfully analyzed")
         else:
-            st.error("Please upload all the required documents")
+            st.error("Please upload the required document")
 
 st.title("Legal case analyzer")
-st.write("Enter information about the legal case you want to analyze and upload the required documents, then press the 'Analyze' button")
+st.write("Enter information about the legal case you want to analyze and upload the required document, then press the 'Analyze' button")
 analyze_case()
