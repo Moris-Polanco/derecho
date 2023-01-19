@@ -29,7 +29,7 @@ def analyze_case():
                 return
             prompt = f'Analyze a legal case according to Guatemalan legislation using the following search query: {doc}. {case_info}'
             response = openai.Completion.create(
-                engine="text-davinci-002",
+                engine="text-davinci-003",
                 prompt=prompt,
                 max_tokens=1024,
                 n=1,
