@@ -5,18 +5,33 @@ import requests
 
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
+import openai
+import streamlit as st
+import requests
+from bs4 import BeautifulSoup
+
+openai.api_key = "YOUR_API_KEY"
+
 def analyze_case():
     case_info = st.text_input("Enter the information about the legal case you want to analyze")
-    url = st.text_input("Enter the URL of the webpage you want to analyze")
+    query = st.text_input("Enter the search query")
     if st.button("Analyze"):
-        if url:
+        if query:
             try:
-                page = requests.get(url)
-                doc = page.text
+                google_url = f"https://www.google.com/search?q={query}"
+                page = requests.get(google_url)
+                soup = BeautifulSoup(page.content, "html.parser")
+                links = soup.find_all("a")
+                links = [link.get("href") for link in links if link.get("href").startswith("/url?q=")]
+                if links:
+                    doc = requests.get(links[0]).text
+                else:
+                    st.warning("No results found")
+                    return
             except:
-                st.error("An error occurred while reading the webpage")
+                st.error("An error occurred while searching the query")
                 return
-            prompt = f'Analyze a legal case according to Guatemalan legislation using the following webpage: {doc}. {case_info}'
+            prompt = f'Analyze a legal case according to Guatemalan legislation using the following search query: {doc}. {case_info}'
             response = openai.Completion.create(
                 engine="text-davinci-002",
                 prompt=prompt,
@@ -30,10 +45,10 @@ def analyze_case():
             else:
                 st.success(response["choices"][0]["text"])
             if st.button("Success"):
-                st.success("The case has been successfully analyzed")
-        else:
-            st.error("Please enter the URL of the webpage")
+                st.success("The case has been successfully analyzed
+            else:
+                st.error("Please enter a search query")
 
-st.title("Legal case analyzer")
-st.write("Enter information about the legal case you want to analyze and enter the URL of the webpage, then press the 'Analyze' button")
-analyze_case()
+    st.title("Legal case analyzer")
+    st.write("Enter information about the legal case you want to analyze and enter the search query, then press the 'Analyze' button")
+    analyze_case()
